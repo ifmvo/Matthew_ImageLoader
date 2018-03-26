@@ -1,0 +1,167 @@
+package com.ifmvo.imageloader;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.ifmvo.imageloader.circle.GlideCircleTransform;
+import com.ifmvo.imageloader.circle.GlideRoundTransform;
+import com.ifmvo.imageloader.progress.LoaderOptions;
+import com.ifmvo.imageloader.progress.OnProgressListener;
+import com.ifmvo.imageloader.progress.ProgressManager;
+
+import java.io.File;
+
+
+/**
+ *
+ * Created by 陈序员 on 2017/10/11.
+ */
+public class GlideLoader implements ILoader {
+//    @Override
+//    public void load(Context context, ImageView target, String url) {
+//        load(context, target, url, null, null, null);
+//    }
+//
+//    @Override
+//    public void load(Context context, ImageView target, String url, String thumbnail) {
+//        load(context, target, url, thumbnail, null, null);
+//    }
+
+    @Override
+    public void load(Context context, ImageView target, String url, LoaderOptions loaderOptions) {
+        load(context, target, url, null, loaderOptions, null);
+    }
+
+    @Override
+    public void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions) {
+        load(context, target, url, thumbnail, loaderOptions, null);
+    }
+
+    @Override
+    public void load(Context context, ImageView target, String url, LoaderOptions loaderOptions, LoadListener loadListener) {
+        load(context, target, url, null, loaderOptions, loadListener);
+    }
+
+    /**
+     * 其他的几个重载的方法都会直接调用这个方法
+     * @param url url
+     * @param thumbnail 缩略图
+     * @param loaderOptions 参数
+     * @param loadListener 监听器
+     */
+    @Override
+    public void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions, final LoadListener loadListener) {
+        if (target == null){
+            throw new RuntimeException("GlideLoader : target must not null");
+        }
+        RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(url);
+
+        /*
+         * 如果thumbnail 不空就填进去
+         */
+        if (!TextUtils.isEmpty(thumbnail)){
+            RequestBuilder<Drawable> requestBuilderThumb = Glide.with(context).load(thumbnail);
+            requestBuilder.thumbnail(requestBuilderThumb);
+        }
+
+        /*
+         * 包装参数、listener
+         */
+        wrap(url, requestBuilder, loaderOptions, loadListener).into(target);
+
+    }
+
+    private RequestBuilder<Drawable> wrap(String url, RequestBuilder<Drawable> requestBuilder, LoaderOptions loaderOptions, final LoadListener loadListener){
+
+        if (loaderOptions != null){
+            RequestOptions requestOptions = new RequestOptions();
+
+            //设置圆
+            if (loaderOptions.isCircle()){
+                requestOptions.transform(new GlideCircleTransform());
+            }
+            //设置圆角
+            if (loaderOptions.getRoundRadius() != -1){
+                requestOptions.apply(RequestOptions.centerCropTransform()).transform(new GlideRoundTransform(loaderOptions.getRoundRadius()));
+            }
+            //设置error
+            if (loaderOptions.getIconErrorRes() != -1){
+                requestOptions.error(loaderOptions.getIconErrorRes());
+            }
+            //设置placeholder
+            if (loaderOptions.getIconLoadingRes() != -1){
+                requestOptions.placeholder(loaderOptions.getIconLoadingRes());
+            }
+
+            requestBuilder.apply(requestOptions);
+        }
+
+        if (loadListener != null){
+            requestBuilder.listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    loadListener.onLoadFailed(e);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    loadListener.onLoadCompleted(resource);
+                    return false;
+                }
+            });
+
+            ProgressManager.addProgressListener(url, new OnProgressListener() {
+                @Override
+                public void onProgress(String imageUrl, long bytesRead, long totalBytes, boolean isDone, GlideException exception) {
+                    loadListener.onLoadProgress((int) ((bytesRead * 1.0f / totalBytes) * 100.0f));
+
+                    if (isDone){
+                        ProgressManager.removeProgressListener(imageUrl, this);
+                    }
+                }
+            });
+        }
+
+        return requestBuilder;
+    }
+
+    @Override
+    public void loadAssets(ImageView target, String assetName) {
+
+    }
+
+    @Override
+    public void loadFile(ImageView target, File file) {
+
+    }
+
+    @Override
+    public void clearMemoryCache(Context context) {
+        Glide.get(context).clearMemory();
+    }
+
+    @Override
+    public void clearDiskCache(Context context) {
+        Glide.get(context).clearDiskCache();
+    }
+
+    @Override
+    public void resume(Context context) {
+    }
+
+    @Override
+    public void pause(Context context) {
+
+    }
+}
