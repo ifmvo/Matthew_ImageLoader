@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -20,8 +21,6 @@ import com.ifmvo.imageloader.progress.OnProgressListener;
 import com.ifmvo.imageloader.progress.ProgressManager;
 
 import java.io.File;
-
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 
 /**
@@ -73,7 +72,7 @@ public class GlideLoader implements ILoader {
          */
         if (!TextUtils.isEmpty(thumbnail)){
             RequestBuilder<Drawable> requestBuilderThumb = Glide.with(context).load(thumbnail);
-            requestBuilder = requestBuilder.thumbnail(requestBuilderThumb);
+            requestBuilder.thumbnail(requestBuilderThumb);
         }
 
         /*
@@ -90,26 +89,33 @@ public class GlideLoader implements ILoader {
 
             //设置圆
             if (loaderOptions.isCircle()){
-                requestOptions = requestOptions.transform(new GlideCircleTransform());
+                requestOptions.transform(new GlideCircleTransform());
             }
+
+            //跳过内存缓存和硬盘缓存
+            if (loaderOptions.isSkipCache()){
+                requestOptions.skipMemoryCache(true);
+                requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE);
+            }
+
             //设置圆角
             if (loaderOptions.getRoundRadius() != -1){
-                requestOptions = requestOptions.apply(RequestOptions.centerCropTransform()).transform(new GlideRoundTransform(loaderOptions.getRoundRadius()));
+                requestOptions.apply(RequestOptions.centerCropTransform()).transform(new GlideRoundTransform(loaderOptions.getRoundRadius()));
             }
             //设置error
             if (loaderOptions.getIconErrorRes() != -1){
-                requestOptions = requestOptions.error(loaderOptions.getIconErrorRes());
+                requestOptions.error(loaderOptions.getIconErrorRes());
             }
             //设置placeholder
             if (loaderOptions.getIconLoadingRes() != -1){
-                requestOptions = requestOptions.placeholder(loaderOptions.getIconLoadingRes());
+                requestOptions.placeholder(loaderOptions.getIconLoadingRes());
             }
 
-            requestBuilder = requestBuilder.apply(requestOptions).transition(withCrossFade());
+            requestBuilder.apply(requestOptions);
         }
 
         if (loadListener != null){
-            requestBuilder = requestBuilder.listener(new RequestListener<Drawable>() {
+            requestBuilder.listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     loadListener.onLoadFailed(e);

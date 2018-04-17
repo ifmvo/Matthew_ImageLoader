@@ -17,6 +17,8 @@ public class LoaderOptions{
 
     private int roundRadius = -1;
 
+    private boolean skipCache = false;
+
     public LoaderOptions error(int iconRes){
         this.iconErrorRes = iconRes;
         return this;
@@ -41,6 +43,15 @@ public class LoaderOptions{
         this.iconErrorRes = R.drawable.ic_error;
         this.iconLoadingRes = R.drawable.ic_loading;
         return this;
+    }
+
+    public LoaderOptions skipCache(){
+        this.skipCache = true;
+        return this;
+    }
+
+    public boolean isSkipCache() {
+        return skipCache;
     }
 
     public final int getIconErrorRes() {
