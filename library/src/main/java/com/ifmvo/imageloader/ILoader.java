@@ -36,6 +36,8 @@ public interface ILoader {
 
     void clearDiskCache(Context context);
 
+    String getCacheSize(Context context);
+
     void resume(Context context);
 
     void pause(Context context);
