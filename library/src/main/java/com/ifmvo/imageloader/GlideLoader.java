@@ -180,7 +180,7 @@ public class GlideLoader implements ILoader {
 
         double kiloByte = size / 1024;
         if (kiloByte < 1) {
-            return size + "Byte";
+            return size + "KB";
         }
 
         double megaByte = kiloByte / 1024;
