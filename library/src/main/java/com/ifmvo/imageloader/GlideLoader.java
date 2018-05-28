@@ -24,6 +24,8 @@ import com.ifmvo.imageloader.progress.ProgressManager;
 import java.io.File;
 import java.math.BigDecimal;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 
 /**
  *
@@ -113,6 +115,7 @@ public class GlideLoader implements ILoader {
                 requestOptions.placeholder(loaderOptions.getIconLoadingRes());
             }
 
+            requestBuilder.transition(withCrossFade());
             requestBuilder.apply(requestOptions);
         }
 
