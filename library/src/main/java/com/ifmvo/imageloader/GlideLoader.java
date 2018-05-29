@@ -43,6 +43,11 @@ public class GlideLoader implements ILoader {
 //    }
 
     @Override
+    public void load(Context context, ImageView target, String url) {
+        load(context, target, url, null, null, null);
+    }
+
+    @Override
     public void load(Context context, ImageView target, String url, LoaderOptions loaderOptions) {
         load(context, target, url, null, loaderOptions, null);
     }
@@ -115,7 +120,6 @@ public class GlideLoader implements ILoader {
                 requestOptions.placeholder(loaderOptions.getIconLoadingRes());
             }
 
-            requestBuilder.transition(withCrossFade());
             requestBuilder.apply(requestOptions);
         }
 
@@ -146,6 +150,7 @@ public class GlideLoader implements ILoader {
             });
         }
 
+        requestBuilder.transition(withCrossFade());
         return requestBuilder;
     }
 

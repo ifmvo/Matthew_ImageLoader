@@ -19,6 +19,7 @@ public interface ILoader {
 //    void load(Context context, ImageView target, String url);
 
 //    void load(Context context, ImageView target, String url, String thumbnail);
+    void load(Context context, ImageView target, String url);
 
     void load(Context context, ImageView target, String url, LoaderOptions loaderOptions);
 
