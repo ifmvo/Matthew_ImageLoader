@@ -13,6 +13,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -20,10 +21,12 @@ import com.ifmvo.imageloader.circle.GlideCircleTransform;
 import com.ifmvo.imageloader.circle.GlideRoundTransform;
 import com.ifmvo.imageloader.progress.LoaderOptions;
 import com.ifmvo.imageloader.progress.OnProgressListener;
+import com.ifmvo.imageloader.progress.ProgressAppGlideModule;
 import com.ifmvo.imageloader.progress.ProgressManager;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -35,53 +38,67 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 public class GlideLoader implements ILoader {
 
     @Override
-    public void load(Context context, ImageView target, String url) {
-        load(context, target, url, null, null, null);
+    public void load(Context context, ImageView target, String... urlArr) {
+        load(context, target, null, null, null, urlArr);
     }
 
     @Override
-    public void load(Context context, ImageView target, String url, LoaderOptions loaderOptions) {
-        load(context, target, url, null, loaderOptions, null);
+    public void load(Context context, ImageView target, LoaderOptions loaderOptions, String... urlArr) {
+        load(context, target, null, loaderOptions, null, urlArr);
     }
 
     @Override
-    public void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions) {
-        load(context, target, url, thumbnail, loaderOptions, null);
+    public void load(Context context, ImageView target, String thumbnail, LoaderOptions loaderOptions, String... urlArr) {
+        load(context, target, thumbnail, loaderOptions, null, urlArr);
     }
 
+
     @Override
-    public void load(Context context, ImageView target, String url, LoaderOptions loaderOptions, LoadListener loadListener) {
-        load(context, target, url, null, loaderOptions, loadListener);
+    public void load(Context context, ImageView target, LoaderOptions loaderOptions, LoadListener loadListener, String... urlArr) {
+        load(context, target, null, loaderOptions, loadListener, urlArr);
     }
 
     /**
      * 其他的几个重载的方法都会直接调用这个方法
-     * @param url url
+     * @param urlArr url
      * @param thumbnail 缩略图
      * @param loaderOptions 参数
      * @param loadListener 监听器
      */
     @Override
-    @SuppressLint("CheckResult")
-    public void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions, final LoadListener loadListener) {
+    public void load(Context context, ImageView target, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener, String... urlArr) {
         if (target == null){
             throw new RuntimeException("GlideLoader : target must not null");
         }
-        RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(url);
+
+        if (urlArr == null || urlArr.length == 0 || TextUtils.isEmpty(urlArr[0])){
+            throw new RuntimeException("GlideLoader : urlArr must not null");
+        }
+
+        RequestBuilder<Drawable> requestBuilder = getRequestBuilder(context, urlArr);
 
         /*
          * 如果thumbnail 不空就填进去
          */
         if (!TextUtils.isEmpty(thumbnail)){
-            RequestBuilder<Drawable> requestBuilderThumb = Glide.with(context).load(thumbnail);
-            requestBuilder.thumbnail(requestBuilderThumb);
+            requestBuilder.thumbnail(getRequestBuilder(context, thumbnail));
         }
 
         /*
          * 包装参数、listener
          */
-        wrap(url, requestBuilder, loaderOptions, loadListener).into(target);
+        wrap(urlArr[0], requestBuilder, loaderOptions, loadListener).into(target);
+    }
 
+    private RequestBuilder<Drawable> getRequestBuilder(Context context, String... urlArr){
+        int mCurrentPosition = 0;
+        if (mCurrentPosition + 1 < urlArr.length){
+            String[] temp = new String[urlArr.length - 1];
+            System.arraycopy(urlArr, 1, temp, 0, urlArr.length - 1);
+            return Glide.with(context).load(urlArr[mCurrentPosition]).error(getRequestBuilder(context, temp));
+        }else{
+            return Glide.with(context).load(urlArr[0]);
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -113,8 +130,6 @@ public class GlideLoader implements ILoader {
             if (loaderOptions.getIconLoadingRes() != -1){
                 requestOptions.placeholder(loaderOptions.getIconLoadingRes());
             }
-
-            requestBuilder.apply(requestOptions);
         }
 
         if (loadListener != null){

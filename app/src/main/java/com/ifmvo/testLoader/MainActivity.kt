@@ -16,29 +16,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val url = "https://github.com/ifmvo/SomeImage/blob/master/banner3.png?raw=true"
+        val url = "https://github.com/ifmvo/SomeImage/blob/master/banner10.png?raw=true"
+        val errorUrl = "https://avatar.csdn.net/0/9/5/1_rabbitbug.jpg"
 
-        ILFactory.getLoader().load(this, imageview, url, LoaderOptions().defaultOptions())
-
-        ILFactory.getLoader().load(this, imageview, url, LoaderOptions().placeHolder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher_round))
-
-        ILFactory.getLoader().load(this, imageview, url, LoaderOptions().placeHolder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher_round).skipCache())
-
-        ILFactory.getLoader().load(this, imageview, url, LoaderOptions().placeHolder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher_round).skipCache().circle())
-
-        ILFactory.getLoader().load(this, imageview, url, LoaderOptions().placeHolder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher_round).skipCache().circle(), object : LoadListener(){
-            override fun onLoadCompleted(drawable: Drawable?): Boolean {
-                return false
-            }
-
-            override fun onLoadFailed(e: Throwable?): Boolean {
-                return super.onLoadFailed(e)
-            }
-
-            override fun onLoadProgress(progress: Int) {
-                super.onLoadProgress(progress)
-            }
-        })
+        ILFactory.getLoader().load(this, imageview, LoaderOptions().defaultOptions(), url, errorUrl)
 
     }
 }

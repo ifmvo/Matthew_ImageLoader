@@ -14,20 +14,15 @@ import java.io.File;
 
 public interface ILoader {
 
-//    ILoader init(Context context);
+    void load(Context context, ImageView target, String ... urlArr);
 
-//    void load(Context context, ImageView target, String url);
+    void load(Context context, ImageView target, LoaderOptions loaderOptions, String ... urlArr);
 
-//    void load(Context context, ImageView target, String url, String thumbnail);
-    void load(Context context, ImageView target, String url);
+    void load(Context context, ImageView target, String thumbnail, LoaderOptions loaderOptions, String ... urlArr);
 
-    void load(Context context, ImageView target, String url, LoaderOptions loaderOptions);
+    void load(Context context, ImageView target, LoaderOptions loaderOptions, LoadListener loadListener, String ... urlArr);
 
-    void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions);
-
-    void load(Context context, ImageView target, String url, LoaderOptions loaderOptions, LoadListener loadListener);
-
-    void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener);
+    void load(Context context, ImageView target, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener, String ... urlArr);
 
     void loadAssets(ImageView target, String assetName);
 
