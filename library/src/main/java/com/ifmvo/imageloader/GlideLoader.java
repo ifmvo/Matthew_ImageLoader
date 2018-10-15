@@ -1,5 +1,6 @@
 package com.ifmvo.imageloader;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -32,15 +33,6 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
  * Created by 陈序员 on 2017/10/11.
  */
 public class GlideLoader implements ILoader {
-//    @Override
-//    public void load(Context context, ImageView target, String url) {
-//        load(context, target, url, null, null, null);
-//    }
-//
-//    @Override
-//    public void load(Context context, ImageView target, String url, String thumbnail) {
-//        load(context, target, url, thumbnail, null, null);
-//    }
 
     @Override
     public void load(Context context, ImageView target, String url) {
@@ -70,6 +62,7 @@ public class GlideLoader implements ILoader {
      * @param loadListener 监听器
      */
     @Override
+    @SuppressLint("CheckResult")
     public void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions, final LoadListener loadListener) {
         if (target == null){
             throw new RuntimeException("GlideLoader : target must not null");
@@ -91,6 +84,7 @@ public class GlideLoader implements ILoader {
 
     }
 
+    @SuppressLint("CheckResult")
     private RequestBuilder<Drawable> wrap(String url, RequestBuilder<Drawable> requestBuilder, LoaderOptions loaderOptions, final LoadListener loadListener){
 
         if (loaderOptions != null){
@@ -214,7 +208,7 @@ public class GlideLoader implements ILoader {
     }
 
 
-    private long getFolderSize(File file) throws Exception {
+    private long getFolderSize(File file) {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
