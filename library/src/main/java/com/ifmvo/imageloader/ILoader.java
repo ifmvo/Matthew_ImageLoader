@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.ifmvo.imageloader.progress.LoaderOptions;
 
 import java.io.File;
+import java.util.List;
 
 
 /**
@@ -14,11 +15,6 @@ import java.io.File;
 
 public interface ILoader {
 
-//    ILoader init(Context context);
-
-//    void load(Context context, ImageView target, String url);
-
-//    void load(Context context, ImageView target, String url, String thumbnail);
     void load(Context context, ImageView target, String url);
 
     void load(Context context, ImageView target, String url, LoaderOptions loaderOptions);
@@ -28,6 +24,20 @@ public interface ILoader {
     void load(Context context, ImageView target, String url, LoaderOptions loaderOptions, LoadListener loadListener);
 
     void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener);
+
+
+
+    void load(Context context, ImageView target, List<String> urlList);
+
+    void load(Context context, ImageView target, List<String> urlList, LoaderOptions loaderOptions);
+
+    void load(Context context, ImageView target, List<String> urlList, String thumbnail, LoaderOptions loaderOptions);
+
+    void load(Context context, ImageView target, List<String> urlList, LoaderOptions loaderOptions, LoadListener loadListener);
+
+    void load(Context context, ImageView target, List<String> urlList, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener);
+
+
 
     void loadAssets(ImageView target, String assetName);
 
