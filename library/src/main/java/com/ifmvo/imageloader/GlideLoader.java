@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.Option;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
@@ -68,11 +69,11 @@ public class GlideLoader implements ILoader {
     @Override
     public void load(Context context, ImageView target, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener, String... urlArr) {
         if (target == null){
-            throw new RuntimeException("GlideLoader : target must not null");
+            return ;
         }
 
         if (urlArr == null || urlArr.length == 0 || TextUtils.isEmpty(urlArr[0])){
-            throw new RuntimeException("GlideLoader : urlArr must not null");
+            return ;
         }
 
         RequestBuilder<Drawable> requestBuilder = getRequestBuilder(context, urlArr);
@@ -130,6 +131,8 @@ public class GlideLoader implements ILoader {
             if (loaderOptions.getIconLoadingRes() != -1){
                 requestOptions.placeholder(loaderOptions.getIconLoadingRes());
             }
+
+            requestOptions.set(Option.disk("", null, null), null);
         }
 
         if (loadListener != null){
