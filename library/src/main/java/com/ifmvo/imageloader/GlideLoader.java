@@ -36,6 +36,30 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 public class GlideLoader implements ILoader {
 
     @Override
+    public void load(Context context, ImageView target, int resId) {
+        load(context, target, resId);
+    }
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void load(Context context, ImageView target, int resId, LoaderOptions loaderOptions) {
+        if (target == null){
+            return ;
+        }
+
+        if (resId == 0){
+            return ;
+        }
+
+        RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(resId);
+
+        /*
+         * 包装参数、listener
+         */
+        wrap(null, requestBuilder, loaderOptions, null).into(target);
+    }
+
+    @Override
     public void load(Context context, ImageView target, List<String> urlList) {
         load(context, target, urlList, null);
     }

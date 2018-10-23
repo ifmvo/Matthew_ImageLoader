@@ -15,6 +15,12 @@ import java.util.List;
 
 public interface ILoader {
 
+    void load(Context context, ImageView target, int resId);
+
+    void load(Context context, ImageView target, int resId, LoaderOptions loaderOptions);
+
+
+
     void load(Context context, ImageView target, String url);
 
     void load(Context context, ImageView target, String url, LoaderOptions loaderOptions);

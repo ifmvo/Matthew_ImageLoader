@@ -29,6 +29,7 @@ public class ProgressManager {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder()
+                    .retryOnConnectionFailure(false)
                     .addNetworkInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(@NonNull Chain chain) throws IOException {
