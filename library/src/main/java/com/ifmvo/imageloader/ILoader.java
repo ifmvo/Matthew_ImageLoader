@@ -1,6 +1,7 @@
 package com.ifmvo.imageloader;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.ifmvo.imageloader.progress.LoaderOptions;
@@ -14,6 +15,12 @@ import java.util.List;
  */
 
 public interface ILoader {
+
+    void load(Context context, ImageView target, Bitmap bitmap);
+
+    void load(Context context, ImageView target, Bitmap bitmap, LoaderOptions loaderOptions);
+
+
 
     void load(Context context, ImageView target, int resId);
 

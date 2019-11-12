@@ -2,6 +2,7 @@ package com.ifmvo.imageloader;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -34,6 +35,29 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
  * Created by 陈序员 on 2017/10/11.
  */
 public class GlideLoader implements ILoader {
+
+    @Override
+    public void load(Context context, ImageView target, Bitmap bitmap) {
+        load(context, target, bitmap);
+    }
+
+    @Override
+    public void load(Context context, ImageView target, Bitmap bitmap, LoaderOptions loaderOptions) {
+        if (target == null){
+            return ;
+        }
+
+        if (bitmap == null){
+            return ;
+        }
+
+        RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(bitmap);
+
+        /*
+         * 包装参数、listener
+         */
+        wrap(null, requestBuilder, loaderOptions, null).into(target);
+    }
 
     @Override
     public void load(Context context, ImageView target, int resId) {
