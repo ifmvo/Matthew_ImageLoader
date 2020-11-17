@@ -7,7 +7,7 @@ import com.ifmvo.imageloader.R;
  * Created by 陈序员 on 2017/10/10.
  */
 
-public class LoaderOptions{
+public class LoaderOptions {
 
     private int iconErrorRes = -1;
 
@@ -19,35 +19,46 @@ public class LoaderOptions{
 
     private boolean skipCache = false;
 
-    public LoaderOptions error(int iconRes){
+    private boolean transition = false;
+
+    public LoaderOptions error(int iconRes) {
         this.iconErrorRes = iconRes;
         return this;
     }
 
-    public LoaderOptions placeHolder(int iconRes){
+    public LoaderOptions placeHolder(int iconRes) {
         this.iconLoadingRes = iconRes;
         return this;
     }
 
-    public LoaderOptions circle(){
+    public LoaderOptions circle() {
         this.isCircle = true;
         return this;
     }
 
-    public LoaderOptions round(int dpRoundRadius){
+    public LoaderOptions round(int dpRoundRadius) {
         this.roundRadius = dpRoundRadius;
         return this;
     }
 
-    public LoaderOptions defaultOptions(){
+    public LoaderOptions defaultOptions() {
         this.iconErrorRes = R.drawable.ic_error;
         this.iconLoadingRes = R.drawable.ic_loading;
         return this;
     }
 
-    public LoaderOptions skipCache(){
+    public LoaderOptions skipCache() {
         this.skipCache = true;
         return this;
+    }
+
+    public LoaderOptions transition() {
+        this.transition = true;
+        return this;
+    }
+
+    public boolean isTransition() {
+        return transition;
     }
 
     public boolean isSkipCache() {

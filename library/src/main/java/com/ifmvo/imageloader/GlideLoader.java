@@ -31,7 +31,6 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 
 /**
- *
  * Created by 陈序员 on 2017/10/11.
  */
 public class GlideLoader implements ILoader {
@@ -43,12 +42,12 @@ public class GlideLoader implements ILoader {
 
     @Override
     public void load(Context context, ImageView target, Bitmap bitmap, LoaderOptions loaderOptions) {
-        if (target == null){
-            return ;
+        if (target == null) {
+            return;
         }
 
-        if (bitmap == null){
-            return ;
+        if (bitmap == null) {
+            return;
         }
 
         RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(bitmap);
@@ -67,12 +66,12 @@ public class GlideLoader implements ILoader {
     @SuppressLint("CheckResult")
     @Override
     public void load(Context context, ImageView target, int resId, LoaderOptions loaderOptions) {
-        if (target == null){
-            return ;
+        if (target == null) {
+            return;
         }
 
-        if (resId == 0){
-            return ;
+        if (resId == 0) {
+            return;
         }
 
         RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(resId);
@@ -106,12 +105,12 @@ public class GlideLoader implements ILoader {
     @SuppressLint("CheckResult")
     @Override
     public void load(Context context, ImageView target, List<String> urlList, String thumbnail, LoaderOptions loaderOptions, LoadListener loadListener) {
-        if (target == null){
-            return ;
+        if (target == null) {
+            return;
         }
 
-        if (urlList == null || urlList.size() == 0){
-            return ;
+        if (urlList == null || urlList.size() == 0) {
+            return;
         }
 
         RequestBuilder<Drawable> requestBuilder = getRequestBuilder(context, urlList, loaderOptions, loadListener);
@@ -119,7 +118,7 @@ public class GlideLoader implements ILoader {
         /*
          * 如果thumbnail 不空就填进去
          */
-        if (!TextUtils.isEmpty(thumbnail)){
+        if (!TextUtils.isEmpty(thumbnail)) {
             requestBuilder.thumbnail(Glide.with(context).load(thumbnail));
         }
 
@@ -151,15 +150,16 @@ public class GlideLoader implements ILoader {
 
     /**
      * 其他的几个重载的方法都会直接调用这个方法
-     * @param url url
-     * @param thumbnail 缩略图
+     *
+     * @param url           url
+     * @param thumbnail     缩略图
      * @param loaderOptions 参数
-     * @param loadListener 监听器
+     * @param loadListener  监听器
      */
     @SuppressLint("CheckResult")
     @Override
     public void load(Context context, ImageView target, String url, String thumbnail, LoaderOptions loaderOptions, final LoadListener loadListener) {
-        if (target == null){
+        if (target == null) {
             throw new RuntimeException("GlideLoader : target must not null");
         }
         RequestBuilder<Drawable> requestBuilder = Glide.with(context).load(url);
@@ -167,7 +167,7 @@ public class GlideLoader implements ILoader {
         /*
          * 如果thumbnail 不空就填进去
          */
-        if (!TextUtils.isEmpty(thumbnail)){
+        if (!TextUtils.isEmpty(thumbnail)) {
             requestBuilder.thumbnail(Glide.with(context).load(thumbnail));
         }
 
@@ -178,51 +178,51 @@ public class GlideLoader implements ILoader {
 
     }
 
-    private RequestBuilder<Drawable> getRequestBuilder(Context context, List<String> urlList, LoaderOptions loaderOptions, LoadListener loadListener){
+    private RequestBuilder<Drawable> getRequestBuilder(Context context, List<String> urlList, LoaderOptions loaderOptions, LoadListener loadListener) {
         int mCurrentPosition = 0;
-        if (mCurrentPosition + 1 < urlList.size()){
+        if (mCurrentPosition + 1 < urlList.size()) {
             RequestBuilder<Drawable> requestBuilder = getRequestBuilder(context, urlList.subList(1, urlList.size()), loaderOptions, loadListener);
             wrap(urlList.get(0), requestBuilder, loaderOptions, loadListener);
             return Glide.with(context).load(urlList.get(mCurrentPosition)).error(requestBuilder);
-        }else{
+        } else {
             return Glide.with(context).load(urlList.get(0));
         }
     }
 
     @SuppressLint("CheckResult")
-    private RequestBuilder<Drawable> wrap(String url, RequestBuilder<Drawable> requestBuilder, LoaderOptions loaderOptions, final LoadListener loadListener){
+    private RequestBuilder<Drawable> wrap(String url, RequestBuilder<Drawable> requestBuilder, LoaderOptions loaderOptions, final LoadListener loadListener) {
 
-        if (loaderOptions != null){
+        if (loaderOptions != null) {
             RequestOptions requestOptions = new RequestOptions();
 
             //设置圆
-            if (loaderOptions.isCircle()){
+            if (loaderOptions.isCircle()) {
                 requestOptions.transform(new GlideCircleTransform());
             }
 
             //跳过内存缓存和硬盘缓存
-            if (loaderOptions.isSkipCache()){
+            if (loaderOptions.isSkipCache()) {
                 requestOptions.skipMemoryCache(true);
                 requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE);
             }
 
             //设置圆角
-            if (loaderOptions.getRoundRadius() != -1){
+            if (loaderOptions.getRoundRadius() != -1) {
                 requestOptions.apply(RequestOptions.centerCropTransform()).transform(new GlideRoundTransform(loaderOptions.getRoundRadius()));
             }
             //设置error
-            if (loaderOptions.getIconErrorRes() != -1){
+            if (loaderOptions.getIconErrorRes() != -1) {
                 requestOptions.error(loaderOptions.getIconErrorRes());
             }
             //设置placeholder
-            if (loaderOptions.getIconLoadingRes() != -1){
+            if (loaderOptions.getIconLoadingRes() != -1) {
                 requestOptions.placeholder(loaderOptions.getIconLoadingRes());
             }
 
             requestBuilder.apply(requestOptions);
         }
 
-        if (loadListener != null){
+        if (loadListener != null) {
             requestBuilder.listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -242,14 +242,17 @@ public class GlideLoader implements ILoader {
                 public void onProgress(String imageUrl, long bytesRead, long totalBytes, boolean isDone, GlideException exception) {
                     loadListener.onLoadProgress((int) ((bytesRead * 1.0f / totalBytes) * 100.0f));
 
-                    if (isDone){
+                    if (isDone) {
                         ProgressManager.removeProgressListener(imageUrl, this);
                     }
                 }
             });
         }
 
-        requestBuilder.transition(withCrossFade());
+        if (loaderOptions.isTransition()) {
+            requestBuilder.transition(withCrossFade());
+        }
+
         return requestBuilder;
     }
 
@@ -276,7 +279,7 @@ public class GlideLoader implements ILoader {
     @Override
     public String getCacheSize(Context context) {
         try {
-            return getFormatSize(getFolderSize(new File(context.getCacheDir() + "/"+ InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR)));
+            return getFormatSize(getFolderSize(new File(context.getCacheDir() + "/" + InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR)));
         } catch (Exception e) {
             e.printStackTrace();
         }

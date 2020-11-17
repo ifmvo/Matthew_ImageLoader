@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android-Matthew_ImageLoader.iml" filepath="$PROJECT_DIR$/Android-Matthew_ImageLoader.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Matthew_ImageLoader.iml" filepath="$PROJECT_DIR$/Matthew_ImageLoader.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Matthew_ImageLoader-app.iml" filepath="$PROJECT_DIR$/app/Matthew_ImageLoader-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/Matthew_ImageLoader-library.iml" filepath="$PROJECT_DIR$/library/Matthew_ImageLoader-library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Android.Matthew_ImageLoader.iml" filepath="$PROJECT_DIR$/.idea/modules/Android.Matthew_ImageLoader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Matthew_ImageLoader.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Matthew_ImageLoader.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library/Matthew_ImageLoader.library.iml" filepath="$PROJECT_DIR$/.idea/modules/library/Matthew_ImageLoader.library.iml" />
     </modules>
   </component>
 </project>
