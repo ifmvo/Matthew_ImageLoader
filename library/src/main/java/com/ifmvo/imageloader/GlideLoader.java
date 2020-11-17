@@ -249,7 +249,7 @@ public class GlideLoader implements ILoader {
             });
         }
 
-        if (loaderOptions.isTransition()) {
+        if (loaderOptions != null && loaderOptions.isTransition()) {
             requestBuilder.transition(withCrossFade());
         }
 
