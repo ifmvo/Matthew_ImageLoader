@@ -12,7 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ILFactory.getLoader().load(this, imageview, R.mipmap.ic_launcher, LoaderOptions().round(10))
+        btn.setOnClickListener {
+            ILFactory.getLoader().load(this, imageview, "https://wx3.sinaimg.cn/mw1024/007Ohqdmly1gkqz523n1jj30qo0f0gpb.jpg", LoaderOptions())
+        }
+
 
 //        val list = ArrayList<String>()
 
