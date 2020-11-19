@@ -17,6 +17,8 @@ import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.signature.MediaStoreSignature;
+import com.bumptech.glide.signature.ObjectKey;
 import com.ifmvo.imageloader.circle.GlideCircleTransform;
 import com.ifmvo.imageloader.circle.GlideRoundTransform;
 import com.ifmvo.imageloader.progress.LoaderOptions;
@@ -217,6 +219,11 @@ public class GlideLoader implements ILoader {
             //设置placeholder
             if (loaderOptions.getIconLoadingRes() != -1) {
                 requestOptions.placeholder(loaderOptions.getIconLoadingRes());
+            }
+
+            //设置签名
+            if (loaderOptions.getSignatureObject() != null) {
+                requestOptions.signature(new ObjectKey(loaderOptions.getSignatureObject()));
             }
 
             requestBuilder.apply(requestOptions);

@@ -21,6 +21,8 @@ public class LoaderOptions {
 
     private boolean transition = false;
 
+    private Object signatureObject = null;
+
     public LoaderOptions error(int iconRes) {
         this.iconErrorRes = iconRes;
         return this;
@@ -57,6 +59,11 @@ public class LoaderOptions {
         return this;
     }
 
+    public LoaderOptions signatureObject(Object object) {
+        signatureObject = object;
+        return this;
+    }
+
     public boolean isTransition() {
         return transition;
     }
@@ -79,5 +86,9 @@ public class LoaderOptions {
 
     public int getRoundRadius() {
         return roundRadius;
+    }
+
+    public Object getSignatureObject() {
+        return signatureObject;
     }
 }
